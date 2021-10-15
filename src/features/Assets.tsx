@@ -7,6 +7,7 @@ export default function Assets() {
     const [assets,setAssets] = useState<AssetType[]>([]);
     const fetchAssets = async (query="milkyway")=>{
         const {data} = await search(query);
+        // no need for limiting the list  since I don't do any more requests
         const onlyDataWithImages = (data as any)?.collection?.items.filter(showImageType)
         setAssets(onlyDataWithImages);
 
@@ -16,6 +17,7 @@ export default function Assets() {
     },[])
     return (
         <div>
+            <div style={{position:"fixed",top:0,left:0,right:0,zIndex:100}}>
             <Search
             defaultValue="milkyway"
                 placeholder="input search text"
@@ -24,10 +26,13 @@ export default function Assets() {
                 size="large"
                 onSearch={fetchAssets}
             />
-            {assets.map((asset:AssetType)=>{
-                const id = asset.data[0].nasa_id;
-                return <Asset key={id} asset={asset}></Asset>
-            })}
+            </div>
+            <div style={{marginTop:50}}>
+                {assets.map((asset:AssetType)=>{
+                    const id = asset.data[0].nasa_id;
+                    return <Asset key={id} asset={asset}></Asset>
+                })}
+            </div>
         </div>
     )
 }
