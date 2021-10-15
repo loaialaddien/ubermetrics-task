@@ -1,8 +1,10 @@
-import React,{useEffect, useState} from 'react'
+import React,{useEffect, useState,useCallback} from 'react'
 import { search } from '../apis/imagesApi'
 import Asset,{ AssetType } from '../components/asset/asset';
 import { Input, } from 'antd';
 const { Search } = Input;
+
+// area for improvement, we can use a customhook here, useAssets
 const contentBasedOnState= ({error,loading,assets}:{error:Boolean,loading:Boolean,assets:Array<AssetType>})=>{
     if(error) return "error please try again";
     if(loading) return "loading";
@@ -12,11 +14,12 @@ const contentBasedOnState= ({error,loading,assets}:{error:Boolean,loading:Boolea
         return <Asset key={id} asset={asset}></Asset>
     })
 }
+
 export default function Assets() {
     const [assets,setAssets] = useState<AssetType[]>([]);
     const [error,setError] = useState(false)
     const [loading,setLoading] = useState(false)
-    const fetchAssets = async (query="milkyway")=>{
+    const fetchAssets = useCallback(async (query="milkyway")=>{
         if(error) setError(false);
         setLoading(true);
         search(query).then(({data}:any)=>{
@@ -26,10 +29,10 @@ export default function Assets() {
         }).catch(err=>setError(true))
         .finally(()=>setLoading(false));
 
-    }
+    },[error])
     useEffect(()=>{
         fetchAssets();
-    },[])
+    },[fetchAssets])
 
     return (
         <div>

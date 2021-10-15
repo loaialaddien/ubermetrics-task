@@ -54,6 +54,7 @@ export default function Asset({asset}:{asset:AssetType}) {
             onOk={handleOk} 
             onCancel={handleCancel}>
                 <h1>{title}</h1>
+                {/* this is not the best behavior, we need to sanitize data before using  dangerouslySetInnerHTML*/}
                 <p dangerouslySetInnerHTML={{__html:description}}></p>
                 <p>keywords: {(keywords || []).join(", ")}</p>
             </Modal>
