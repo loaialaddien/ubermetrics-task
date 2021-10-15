@@ -1,7 +1,6 @@
-import React,{useEffect, useState,useCallback} from 'react'
-import { search } from '../apis/imagesApi'
 import Asset,{ AssetType } from '../components/asset/asset';
 import { Input, } from 'antd';
+import useAssets from '../customHooks/useAssets';
 const { Search } = Input;
 
 // area for improvement, we can use a customhook here, useAssets
@@ -16,24 +15,7 @@ const contentBasedOnState= ({error,loading,assets}:{error:Boolean,loading:Boolea
 }
 
 export default function Assets() {
-    const [assets,setAssets] = useState<AssetType[]>([]);
-    const [error,setError] = useState(false)
-    const [loading,setLoading] = useState(false)
-    const fetchAssets = useCallback(async (query="milkyway")=>{
-        if(error) setError(false);
-        setLoading(true);
-        search(query).then(({data}:any)=>{
-            // no need for limiting the list  since I don't do any more requests
-            const onlyDataWithImages = (data as any)?.collection?.items.filter(showImageType)
-            setAssets(onlyDataWithImages);
-        }).catch(err=>setError(true))
-        .finally(()=>setLoading(false));
-
-    },[error])
-    useEffect(()=>{
-        fetchAssets();
-    },[fetchAssets])
-
+    const {assets,error,fetchAssets,loading} = useAssets()
     return (
         <div>
             <div style={{position:"fixed",top:0,left:0,right:0,zIndex:100}}>
@@ -54,9 +36,3 @@ export default function Assets() {
         </div>
     )
 }
-function showImageType(e: AssetType){
-        const { data } = e;
-        const asset = data[0];
-        return asset.media_type === "image";
-}
-
