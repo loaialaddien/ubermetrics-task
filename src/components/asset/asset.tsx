@@ -42,10 +42,10 @@ export default function Asset({asset}:{asset:AssetType}) {
         <>
             <Card hoverable title={trimmedTitle}>
                 <div>
-                <img alt={trimmedTitle} src={href}></img>
+                <img style={{borderRadius:10}} alt={trimmedTitle} src={href}></img>
                 </div>
-                <Button type="primary" onClick={showModal}>
-                More Info
+                <Button style={{marginTop:10}} type="primary" onClick={showModal}>
+                     More Info
                 </Button>
             </Card>
             <Modal 
